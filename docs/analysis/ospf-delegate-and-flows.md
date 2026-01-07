@@ -61,23 +61,23 @@ RN -> Destroy : delegate->destroy_node()
 ### 2.2 Mermaid（delegate 创建/销毁）
 ```mermaid
 sequenceDiagram
-    participant OSPF as ospf_area_new()\n(ospfd/ospfd.c)
-    participant RT as route_table_init_with_delegate()\n(lib/table.c)
+    participant OSPF as ospf_area_new()<br>(ospfd/ospfd.c)
+    participant RT as route_table_init_with_delegate()<br>(lib/table.c)
     participant Table as route_table (delegate)
-    participant RN as route_node_new()/route_node_free()\n(lib/table.c)
-    participant Create as delegate->create_node\n(route_node_create)
-    participant Destroy as delegate->destroy_node\n(ospf_range_table_node_destroy)
+    participant RN as route_node_new()/route_node_free()<br>(lib/table.c)
+    participant CreateCallback as create_node callback<br>(route_node_create)
+    participant DestroyCallback as destroy_node callback<br>(ospf_range_table_node_destroy)
 
-    OSPF->>RT: init ranges/nssa_ranges\nwith ospf_range_table_delegate
-    RT->>Table: table->delegate = ospf_range_table_delegate
+    OSPF->>RT: init ranges / nssa_ranges
+    RT->>Table: table.delegate = ospf_range_table_delegate
 
-    Note over RN,Create: Node create path
+    Note over RN,Table: Node create path
     RN->>Table: route_node_new(table)
-    RN->>Create: delegate->create_node()
+    Table->>CreateCallback: delegate.create_node()
 
-    Note over RN,Destroy: Node destroy path
-    RN->>Table: route_node_free(table,node)
-    RN->>Destroy: delegate->destroy_node()
+    Note over RN,Table: Node destroy path
+    RN->>Table: route_node_free(table, node)
+    Table->>DestroyCallback: delegate.destroy_node()
 ```
 
 ---
@@ -86,19 +86,19 @@ sequenceDiagram
 
 ```mermaid
 flowchart TB
-    EventLoop["Event loop (frrevent)"] --> ISM_EVT["ISM/NSM Event Schedule/Execute\n(ospf_ism.h / ospf_nsm.h)"]
-    ISM_EVT --> ISM_FSM["ISM FSM\n(ospf_ism.c)"]
-    ISM_EVT --> NSM_FSM["NSM FSM\n(ospf_nsm.c)"]
+    EventLoop["Event loop (frrevent)"] --> ISM_EVT["ISM/NSM Event Schedule/Execute<br>(ospf_ism.h / ospf_nsm.h)"]
+    ISM_EVT --> ISM_FSM["ISM FSM<br>(ospf_ism.c)"]
+    ISM_EVT --> NSM_FSM["NSM FSM<br>(ospf_nsm.c)"]
 
-    ISM_FSM --> LSA_ORIG["LSA Origination/Flush\n(ospf_ism.c)"]
+    ISM_FSM --> LSA_ORIG["LSA Origination/Flush<br>(ospf_ism.c)"]
     NSM_FSM --> LSA_ORIG
 
-    LSA_ORIG --> LSDB["LSDB\n(ospf_lsdb.c)"]
-    LSDB --> SPF["SPF / Route computation\n(ospf_lsa.c)\nospf_spf_calculate_schedule"]
-    SPF --> Zebra["Zebra API (zclient)\n(ospf_zebra.c)"]
+    LSA_ORIG --> LSDB["LSDB<br>(ospf_lsdb.c)"]
+    LSDB --> SPF["SPF / Route computation<br>(ospf_lsa.c)<br>ospf_spf_calculate_schedule"]
+    SPF --> Zebra["Zebra API (zclient)<br>(ospf_zebra.c)"]
 
-    Delegate["route_table_delegate_t\n(lib/table.h)"] --> RangeTable["OSPF range/nssa range\n(ospf_range_table_delegate)"]
-    RangeTable --> OSPF_Area["ospf_area_new()\n(ospfd/ospfd.c)"]
+    Delegate["route_table_delegate_t<br>(lib/table.h)"] --> RangeTable["OSPF range/nssa range<br>(ospf_range_table_delegate)"]
+    RangeTable --> OSPF_Area["ospf_area_new()<br>(ospfd/ospfd.c)"]
 
     Zebra --> OSPF_Area
 ```
@@ -330,4 +330,3 @@ SPFSched -> ZebraCB : routes/if state influence\n(via zclient callbacks)
 ## 10. 后续可扩展方向
 - 按协议分区：`docs/analysis/ospf/`、`docs/analysis/bgp/`、`docs/analysis/isis/`
 - 按主题分区：`docs/analysis/fsm/`、`docs/analysis/lsdb/`、`docs/analysis/zebra/`
-
