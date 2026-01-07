@@ -1,0 +1,37 @@
+FRR RPM repository
+To add this repository to your RedHat/CentOS system, do:
+
+# possible values for FRRVER: frr-6 frr-7 frr-8 frr-9 frr-10 frr-stable
+# frr-stable will be the latest official stable release
+FRRVER="frr-stable"
+
+# add RPM repository on CentOS 6
+#    Note: FRR only supported up to Version 7.4.x
+curl -O https://rpm.frrouting.org/repo/$FRRVER-repo-1-0.el6.noarch.rpm
+sudo yum install ./$FRRVER*
+
+# add RPM repository on CentOS 7
+curl -O https://rpm.frrouting.org/repo/$FRRVER-repo-1-0.el7.noarch.rpm
+sudo yum install ./$FRRVER*
+
+# add RPM repository on RedHat 8
+#    Note: Supported since FRR 7.3
+curl -O https://rpm.frrouting.org/repo/$FRRVER-repo-1-0.el8.noarch.rpm
+sudo yum install ./$FRRVER*
+
+# add RPM repository on RedHat 9
+#    Note: Supported since FRR 8.3
+curl -O https://rpm.frrouting.org/repo/$FRRVER-repo-1-0.el9.noarch.rpm
+sudo yum install ./$FRRVER*
+
+# install FRR
+sudo yum install frr frr-pythontools
+This key is currently used to sign the repository:
+
+sec   rsa4096 2018-01-12
+      7AB8 AC62 4CBA 356C B621 6D48 F66B 5A91 4067 3A87
+uid   NetDEF CI System  (NetDEF Continous Integration System Signature Key) <cisystem@netdef.org>
+
+
+#unpack
+rpm2cpio xxx.rpm | cpio -div

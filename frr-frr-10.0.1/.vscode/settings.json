@@ -1,0 +1,36 @@
+{
+    // 使用 clangd 作为 C/C++ 语言服务器
+    "C_Cpp.intelliSenseEngine": "disabled",
+    // clangd 可执行文件路径（一般系统自带即可）
+    "clangd.path": "clangd",
+    // clangd 启动参数
+    "clangd.arguments": [
+        // 使用 compile_commands.json（强烈推荐）
+        "--compile-commands-dir=${workspaceFolder}",
+        // 后台索引，加快跳转/补全
+        "--background-index",
+        // 启用 clang-tidy（静态分析）
+        "--clang-tidy",
+        // clang-tidy 常用规则
+        "--clang-tidy-checks=performance-*,bugprone-*,readability-*",
+        // include 清理（你刚才看到的 unused-includes 就来自这里）
+        "--header-insertion=iwyu",
+        "--header-insertion-decorators",
+        // 更智能的补全
+        "--completion-style=detailed",
+        // 显示函数参数占位符
+        "--function-arg-placeholders",
+        // 更友好的诊断
+        "--pretty",
+        // 禁止 clangd 自动插入 #include（只提示，不改代码）
+        "--header-insertion=never",
+        // 降低标准库（stdlib）相关 include-cleaner 噪音
+        "--include-cleaner-stdlib"
+    ],
+    // clangd 日志级别（调试用，平时可关）
+    "clangd.trace": "off",
+    // 保存时自动格式化（如果你用 clang-format）
+    "editor.formatOnSave": true,
+    // 使用 clang-format
+    "C_Cpp.clang_format_fallbackStyle": "LLVM"
+}

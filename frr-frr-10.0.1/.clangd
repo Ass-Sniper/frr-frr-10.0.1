@@ -1,0 +1,36 @@
+CompileFlags:
+  # 自动从 compile_commands.json 读取
+  Add: [
+    -std=gnu11,
+    -Wall,
+    -Wextra,
+    -Wno-format-pedantic,
+    -Wno-gnu-statement-expression-from-macro-expansion,
+    -Wno-c2x-extensions,
+    -Wno-unused-function,
+    -Wno-unused-parameter,
+    -Wno-unused-variable,
+    -Wno-unknown-attributes,
+    -Wno-visibility,
+  ]
+  Remove: [
+    -Werror
+  ]
+
+Diagnostics:
+  # 把 warning 级别的 include-cleaner 提示降噪
+  UnusedIncludes: None
+
+  # 可选：忽略三方代码目录
+  Suppress:
+    - ".*/third_party/.*"
+    - ".*/build/.*"
+
+Index:
+  Background: Build
+
+Completion:
+  AllScopes: true
+
+InlayHints:
+  Enabled: true
