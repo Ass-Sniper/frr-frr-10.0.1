@@ -102,6 +102,9 @@ flowchart TB
 
     Zebra --> OSPF_Area
 ```
+> ISM: Interface State Machine
+>
+> NSM: Neighbor State Machine
 
 ---
 
